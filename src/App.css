@@ -1,0 +1,59 @@
+.primary-color {
+  color: black !important;
+}
+
+.bg-primary-color {
+  background-color: #1b2130 !important;
+  color: white !important;
+}
+
+.white-color {
+  color: white;
+}
+
+.navbar-width {
+  width: 25vw;
+}
+
+.circle {
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+}
+
+.circle1 {
+  background-color: #ff6252;
+}
+.circle2 {
+  background-color: #fdad15;
+}
+.circle3 {
+  background-color: #2ac670;
+}
+
+.navbar-search {
+  background-color: black;
+  color: white;
+  border: 0;
+}
+
+.selected-navbar {
+  background-color: #007aff;
+  color: white;
+  border-radius: 8px;
+  border: 0px;
+}
+
+.padding-extra {
+  padding: 20px 20px;
+}
+
+.width-35 {
+  width: 35%;
+}
+
+.form-border {
+  border: 2px solid blue;
+  padding: 10px;
+  border-radius: 12px;
+}
