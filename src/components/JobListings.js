@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import { Card, Button, Container, Spinner } from "react-bootstrap";
+import { Card, Button, Container, Spinner, Modal } from "react-bootstrap";
 import InfiniteScroll from "react-infinite-scroller";
 
 const JobListing = ({ loadMoreJobs, hasMore, jobs }) => {
+  const [showModal, setShowModal] = useState(false); // To control modal visibility
+  const [selectedJob, setSelectedJob] = useState(null); // To store selected job details
+
+  const handleApplyClick = (job) => {
+    setSelectedJob(job); // Set the selected job
+    setShowModal(true); // Open the modal
+  };
+
+  const handleClose = () => setShowModal(false); // Close the modal
+
   return (
     <Container className="w-100 h-75 px-0">
       <InfiniteScroll
@@ -25,11 +35,54 @@ const JobListing = ({ loadMoreJobs, hasMore, jobs }) => {
                 {job.location}
               </Card.Subtitle>
               <Card.Text>{job.description}</Card.Text>
-              <Button variant="primary">Apply</Button>
+              <Button variant="primary" onClick={() => handleApplyClick(job)}>
+                Apply
+              </Button>
             </Card.Body>
           </Card>
         ))}
       </InfiniteScroll>
+
+      {/* Modal for viewing job details */}
+      {selectedJob && (
+        <Modal show={showModal} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Apply</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h5>Job Title: {selectedJob.title}</h5>
+            <p>
+              <strong>Job Description:</strong> {selectedJob.description}
+            </p>
+            <p>
+              <strong>Location:</strong> {selectedJob.location}
+            </p>
+            <p>
+              <strong>Company:</strong> {selectedJob.company}
+            </p>
+            <p>
+              <strong>Qualifications:</strong> {selectedJob.qualifications}
+            </p>
+            <p>
+              <strong>Work Experience:</strong> {selectedJob.workExperience}
+            </p>
+            <h6>Job Profile:</h6>
+            <ul>
+              {selectedJob.jobProfile.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+              Apply Now
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </Container>
   );
 };
