@@ -34,6 +34,7 @@
 .navbar-search {
   background-color: black;
   color: white;
+
   border: 0;
 }
 
@@ -56,4 +57,38 @@
   border: 2px solid blue;
   padding: 10px;
   border-radius: 12px;
+}
+
+.login > .form-control,
+.login > .input-group-text,
+.register > .form-control,
+.register > .input-group-text {
+  border-top: 2px solid blue;
+  border-bottom: 2px solid blue;
+}
+
+.login > .form-control,
+.register > .form-control {
+  border-left: 2px solid blue;
+}
+
+.login > .input-group-text,
+.register > .input-group-text {
+  border-right: 2px solid blue;
+}
+
+.selected-category,
+.selected-category:hover,
+.selected-category:active {
+  background-color: #fff3cd;
+  color: #664d03;
+  border: 0;
+}
+
+.not-selected-category,
+.not-selected-category:hover,
+.selected-category:active {
+  background-color: #7749f8;
+  color: white;
+  border: 0;
 }
