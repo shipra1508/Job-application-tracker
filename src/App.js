@@ -9,11 +9,12 @@ import Header from "./components/Header";
 import JobListings from "./components/JobListings";
 import JobApplicationForm from "./components/JobApplicationForm";
 import Profile from "./components/Profile"; // Import the Profile component
+import AppliedJobs from "./components/AppliedJobs"; // Import the Profile component
 
 const App = () => {
   const [user, setUser] = useState({
-    fullName: "Pavan",
-    email: "pavan@gmail.com",
+    fullName: "John Doe",
+    email: "john.doe@gmail.com",
     skills: "Web Development",
     experience: "2",
     address: "123, Main Street",
@@ -29,7 +30,35 @@ const App = () => {
   };
 
   const [selectedJob, setSelectedJob] = useState(null);
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState([
+    {
+      jobTitle: "UI Engineer II",
+      fullName: "John Doe",
+      email: "john.doe",
+      preferredSkills: "Web Development",
+      maritalStatus: "Married",
+      experience: "2",
+      dateApplied: formatDateToYYYYMMDD(new Date()),
+    },
+    {
+      jobTitle: "UI Engineer I",
+      fullName: "John Doe",
+      email: "john.doe",
+      preferredSkills: "Web Development",
+      maritalStatus: "Married",
+      experience: "2",
+      dateApplied: formatDateToYYYYMMDD(new Date()),
+    },
+    {
+      jobTitle: "Full Stack Developer",
+      fullName: "John Doe",
+      email: "john.doe",
+      preferredSkills: "Web Development",
+      maritalStatus: "Married",
+      experience: "2",
+      dateApplied: formatDateToYYYYMMDD(new Date()),
+    },
+  ]);
 
   const handleApply = (job) => {
     setSelectedJob(job); // Set selected job for the application form
@@ -141,11 +170,23 @@ const App = () => {
     }, 1500); // Simulating delay
   };
 
+  function formatDateToYYYYMMDD(date) {
+    const year = date.getFullYear(); // Get the full year (YYYY)
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month (0-11) and pad with leading zero
+    const day = String(date.getDate()).padStart(2, "0"); // Get the day (1-31) and pad with leading zero
+
+    return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
+  }
+
   // Handle submission of job applications
   const handleApplicationSubmit = (formData) => {
     setApplications((prevApplications) => [
       ...prevApplications,
-      { jobTitle: selectedJob.title, ...formData },
+      {
+        jobTitle: selectedJob.title,
+        dateApplied: formatDateToYYYYMMDD(new Date()),
+        ...formData,
+      },
     ]);
     setSelectedJob(null); // Clear the selected job after submission
   };
@@ -192,9 +233,19 @@ const App = () => {
               element={
                 <ProtectedRoute user={user}>
                   <JobApplicationForm
+                    user={user}
                     jobTitle={selectedJob?.title || ""}
                     onSubmit={handleApplicationSubmit}
                   />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/applied-jobs" // New route for applied jobs
+              element={
+                <ProtectedRoute user={user}>
+                  <AppliedJobs applications={applications} />
                 </ProtectedRoute>
               }
             />

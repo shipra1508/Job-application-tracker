@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const JobApplicationForm = ({ jobTitle, onSubmit }) => {
+const JobApplicationForm = ({ user, jobTitle, onSubmit }) => {
   const navigate = useNavigate(); // Initialize navigate
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
+    fullName: user.fullName,
+    email: user.email,
     preferredSkills: "",
     maritalStatus: "",
-    experience: "",
+    experience: user.experience,
   });
 
   const handleChange = (e) => {
