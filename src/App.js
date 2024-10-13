@@ -8,9 +8,25 @@ import { Col, Row } from "react-bootstrap";
 import Header from "./components/Header";
 import JobListings from "./components/JobListings";
 import JobApplicationForm from "./components/JobApplicationForm";
+import Profile from "./components/Profile"; // Import the Profile component
 
 const App = () => {
-  const [user, setUser] = useState({ email: "eswar@gmail.com" });
+  const [user, setUser] = useState({
+    fullName: "Pavan",
+    email: "pavan@gmail.com",
+    skills: "Web Development",
+    experience: "2",
+    address: "123, Main Street",
+    mobile: "9876543210",
+  });
+
+  // Function to update user profile
+  const updateUser = (updatedUserData) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      ...updatedUserData,
+    }));
+  };
 
   const [selectedJob, setSelectedJob] = useState(null);
   const [applications, setApplications] = useState([]);
@@ -179,6 +195,15 @@ const App = () => {
                     jobTitle={selectedJob?.title || ""}
                     onSubmit={handleApplicationSubmit}
                   />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute user={user}>
+                  <Profile user={user} updateUser={updateUser} />
                 </ProtectedRoute>
               }
             />
