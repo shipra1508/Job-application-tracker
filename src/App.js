@@ -7,10 +7,17 @@ import ProtectedRoute from "./routing/ProtectedRoute";
 import { Col, Row } from "react-bootstrap";
 import Header from "./components/Header";
 import JobListings from "./components/JobListings";
+import JobApplicationForm from "./components/JobApplicationForm";
 
 const App = () => {
   const [user, setUser] = useState({ email: "eswar@gmail.com" });
-  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [applications, setApplications] = useState([]);
+
+  const handleApply = (job) => {
+    setSelectedJob(job); // Set selected job for the application form
+  };
 
   // Initial job listings with detailed job information
   const initialJobs = [
@@ -75,6 +82,7 @@ const App = () => {
   ];
 
   const categories = [...new Set(initialJobs.map((job) => job.category))];
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
   const [jobs, setJobs] = useState(initialJobs);
   const [filteredJobs, setFilteredJobs] = useState(initialJobs);
@@ -117,6 +125,15 @@ const App = () => {
     }, 1500); // Simulating delay
   };
 
+  // Handle submission of job applications
+  const handleApplicationSubmit = (formData) => {
+    setApplications((prevApplications) => [
+      ...prevApplications,
+      { jobTitle: selectedJob.title, ...formData },
+    ]);
+    setSelectedJob(null); // Clear the selected job after submission
+  };
+
   return (
     <Router>
       <Row>
@@ -146,9 +163,22 @@ const App = () => {
                     <JobListings
                       loadMoreJobs={loadMoreJobs}
                       hasMore={hasMore}
-                      jobs={filteredJobs} // Pass filtered jobs
+                      jobs={filteredJobs}
+                      handleApply={handleApply} // Pass filtered jobs
                     />
                   </div>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/apply"
+              element={
+                <ProtectedRoute user={user}>
+                  <JobApplicationForm
+                    jobTitle={selectedJob?.title || ""}
+                    onSubmit={handleApplicationSubmit}
+                  />
                 </ProtectedRoute>
               }
             />

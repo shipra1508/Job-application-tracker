@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Card, Button, Container, Spinner, Modal } from "react-bootstrap";
 import InfiniteScroll from "react-infinite-scroller";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-const JobListing = ({ loadMoreJobs, hasMore, jobs }) => {
+const JobListing = ({ loadMoreJobs, hasMore, jobs, handleApply }) => {
   const [showModal, setShowModal] = useState(false); // To control modal visibility
   const [selectedJob, setSelectedJob] = useState(null); // To store selected job details
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleApplyClick = (job) => {
     setSelectedJob(job); // Set the selected job
@@ -12,6 +14,11 @@ const JobListing = ({ loadMoreJobs, hasMore, jobs }) => {
   };
 
   const handleClose = () => setShowModal(false); // Close the modal
+
+  const handleApplyNow = () => {
+    handleApply(selectedJob); // Set the selected job in App component
+    navigate("/apply"); // Navigate to the application form
+  };
 
   return (
     <Container className="w-100 h-75 px-0">
@@ -77,7 +84,7 @@ const JobListing = ({ loadMoreJobs, hasMore, jobs }) => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={handleApplyNow}>
               Apply Now
             </Button>
           </Modal.Footer>
