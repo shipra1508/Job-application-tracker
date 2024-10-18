@@ -122,7 +122,7 @@ const Profile = ({ user, updateUser }) => {
           </Form.Label>
           <Col sm={10}>
             <Form.Control
-              type="number"
+              type="text"
               name="experience"
               value={formData.experience}
               onChange={handleChange}

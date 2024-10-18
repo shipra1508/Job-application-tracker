@@ -1,16 +1,28 @@
 import React, { useState } from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const JobApplicationForm = ({ user, selectedJob, onSubmit }) => {
+import { db } from "../firebase/config";
+import { ref, push, set } from "firebase/database";
+
+const JobApplicationForm = ({
+  user,
+  selectedJob,
+  onSubmit,
+  categories,
+  formatDateToYYYYMMDD,
+}) => {
   const navigate = useNavigate(); // Initialize navigate
   const [formData, setFormData] = useState({
-    fullName: user.username,
+    username: user.username,
     email: user.email,
     preferredSkills: "",
     maritalStatus: "",
     experience: user.experience,
   });
+
+  const [validated, setValidated] = useState(false); // State for form validation
+  const [errorMessage, setErrorMessage] = useState(""); // State for error messages
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,18 +30,50 @@ const JobApplicationForm = ({ user, selectedJob, onSubmit }) => {
       ...prevData,
       [name]: value,
     }));
+    setErrorMessage(""); // Clear error message on change
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    navigate("/");
+    const form = e.currentTarget;
+
+    // Validate form
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+      setErrorMessage("Please fill in all required fields correctly.");
+    } else {
+      const newDocRef = push(ref(db, "applications"));
+      await set(newDocRef, {
+        userid: user.id,
+        jobid: selectedJob.id,
+        title: selectedJob.title,
+        description: selectedJob.description,
+        username: formData.username,
+        email: formData.email,
+        experience: formData.experience,
+        preferredSkills: formData.preferredSkills,
+        maritalStatus: formData.maritalStatus,
+        status: "Applied",
+        dateApplied: formatDateToYYYYMMDD(new Date()),
+      });
+
+      setErrorMessage(""); // Clear error message if valid
+      onSubmit(formData); // Submit the form data
+      navigate("/"); // Navigate after successful submission
+    }
+
+    setValidated(true); // Set validated state
   };
 
   return (
     <Container className="mt-5">
       <h2>Application Form for {selectedJob.title}</h2>
-      <Form onSubmit={handleSubmit}>
+      {errorMessage && (
+        <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
+          {errorMessage}
+        </Alert>
+      )}
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group as={Row} controlId="formFullName">
           <Form.Label column sm={2}>
             Full Name
@@ -38,11 +82,14 @@ const JobApplicationForm = ({ user, selectedJob, onSubmit }) => {
             <Form.Control
               type="text"
               name="fullName"
-              value={formData.fullName}
+              value={formData.username}
               onChange={handleChange}
               placeholder="Enter your full name"
               required
             />
+            <Form.Control.Feedback type="invalid">
+              Please provide your full name.
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -59,6 +106,9 @@ const JobApplicationForm = ({ user, selectedJob, onSubmit }) => {
               placeholder="Enter your email"
               required
             />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid email address.
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -73,15 +123,16 @@ const JobApplicationForm = ({ user, selectedJob, onSubmit }) => {
               onChange={handleChange}
               required
             >
-              <option>Select Option</option>
-              <option value="Web Development">Web Development</option>
-              <option value="Front-End Development">
-                Front-End Development
-              </option>
-              <option value="Back-End Development">Back-End Development</option>
-              <option value="Data Science">Data Science</option>
-              <option value="Machine Learning">Machine Learning</option>
+              <option value="">Select Option</option>
+              {categories.map((category, index) => (
+                <option value={category} key={index}>
+                  {category}
+                </option>
+              ))}
             </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Please select your preferred skills.
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -96,10 +147,13 @@ const JobApplicationForm = ({ user, selectedJob, onSubmit }) => {
               onChange={handleChange}
               required
             >
-              <option>Select Option</option>
+              <option value="">Select Option</option>
               <option value="Single">Single</option>
               <option value="Married">Married</option>
             </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Please select your marital status.
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -109,13 +163,16 @@ const JobApplicationForm = ({ user, selectedJob, onSubmit }) => {
           </Form.Label>
           <Col sm={10}>
             <Form.Control
-              type="text"
+              type="number"
               name="experience"
               value={formData.experience}
               onChange={handleChange}
               placeholder="Enter your experience (in years)"
               required
             />
+            <Form.Control.Feedback type="invalid">
+              Please enter your experience in years.
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 

@@ -9,7 +9,7 @@ import Header from "./components/Header";
 import JobListings from "./components/JobListings";
 import JobApplicationForm from "./components/JobApplicationForm";
 import Profile from "./components/Profile"; // Import the Profile component
-import AppliedJobs from "./components/AppliedJobs"; // Import the Profile component
+import AppliedJobs from "./components/AppliedJobs"; // Import the AppliedJobs component
 
 import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
@@ -20,11 +20,13 @@ const App = () => {
     experience: "5",
     password: "divya123",
     role: "user",
-    skills: "React,Java",
-    username: "Divya",
+    skills: ["React", "Java"],
+    username: "Divya 1",
     id: "-O9VobrX-_0LvQQXjC0M",
   });
   const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   // Function to update user profile
   const updateUser = (updatedUserData) => {
@@ -53,6 +55,7 @@ const App = () => {
 
       if (tempUsers.length === 1) {
         setUser(tempUsers[0]);
+        console.log(tempUsers[0]);
       }
     } else {
       setUser({});
@@ -64,7 +67,6 @@ const App = () => {
     const snapshot = await get(dbRef);
     if (snapshot.exists()) {
       const jobs = snapshot.val();
-
       const tempJobs = Object.keys(jobs).map((id) => {
         return {
           ...jobs[id],
@@ -73,61 +75,37 @@ const App = () => {
       });
 
       setJobs(tempJobs);
-      setFilteredJobs(tempJobs);
+      setFilteredJobs(tempJobs); // Initially set filtered jobs to all jobs
     } else {
-      setJobs({});
+      setJobs([]);
+      setFilteredJobs([]);
     }
   };
 
-  const [selectedJob, setSelectedJob] = useState(null);
-  const [applications, setApplications] = useState([
-    {
-      jobTitle: "UI Engineer II",
-      fullName: "John Doe",
-      email: "john.doe",
-      preferredSkills: "Web Development",
-      maritalStatus: "Married",
-      experience: "2",
-      dateApplied: formatDateToYYYYMMDD(new Date()),
-    },
-    {
-      jobTitle: "UI Engineer I",
-      fullName: "John Doe",
-      email: "john.doe",
-      preferredSkills: "Web Development",
-      maritalStatus: "Married",
-      experience: "2",
-      dateApplied: formatDateToYYYYMMDD(new Date()),
-    },
-    {
-      jobTitle: "Full Stack Developer",
-      fullName: "John Doe",
-      email: "john.doe",
-      preferredSkills: "Web Development",
-      maritalStatus: "Married",
-      experience: "2",
-      dateApplied: formatDateToYYYYMMDD(new Date()),
-    },
-  ]);
+  // Load jobs on initial render
+  useEffect(() => {
+    loadJobs();
+  }, []);
 
   const handleApply = (job) => {
     setSelectedJob(job); // Set selected job for the application form
   };
 
   const categories = [...new Set(jobs.map((job) => job.category))];
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
-  const [filteredJobs, setFilteredJobs] = useState(jobs);
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    // Filter jobs based on the selected category
+    if (category === "All") {
+      setFilteredJobs(jobs);
+    } else {
+      setFilteredJobs(jobs.filter((job) => job.category === category));
+    }
+  };
 
-  function formatDateToYYYYMMDD(date) {
-    const year = date.getFullYear(); // Get the full year (YYYY)
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month (0-11) and pad with leading zero
-    const day = String(date.getDate()).padStart(2, "0"); // Get the day (1-31) and pad with leading zero
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [applications, setApplications] = useState([]);
 
-    return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
-  }
-
-  // Handle submission of job applications
   const handleApplicationSubmit = (formData) => {
     setApplications((prevApplications) => [
       ...prevApplications,
@@ -139,6 +117,14 @@ const App = () => {
     ]);
     setSelectedJob(null); // Clear the selected job after submission
   };
+
+  function formatDateToYYYYMMDD(date) {
+    const year = date.getFullYear(); // Get the full year (YYYY)
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month (0-11) and pad with leading zero
+    const day = String(date.getDate()).padStart(2, "0"); // Get the day (1-31) and pad with leading zero
+
+    return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
+  }
 
   return (
     <Router>
@@ -166,9 +152,9 @@ const App = () => {
                 <ProtectedRoute user={user}>
                   <div className="d-flex flex-column justify-content-around align-items-center vh-100 dashboard">
                     <Header
-                      categories={categories}
+                      categories={["All", ...categories]} // Add "All" to categories
                       selectedCategory={selectedCategory}
-                      setSelectedCategory={setSelectedCategory}
+                      setSelectedCategory={handleCategoryChange} // Pass function to change category
                     />
                     <JobListings
                       jobs={filteredJobs}
@@ -179,7 +165,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/apply"
               element={
@@ -188,20 +173,23 @@ const App = () => {
                     user={user}
                     selectedJob={selectedJob}
                     onSubmit={handleApplicationSubmit}
+                    categories={categories}
+                    formatDateToYYYYMMDD={formatDateToYYYYMMDD}
                   />
                 </ProtectedRoute>
               }
             />
-
             <Route
-              path="/applied-jobs" // New route for applied jobs
+              path="/applied-jobs"
               element={
                 <ProtectedRoute user={user}>
-                  <AppliedJobs applications={applications} />
+                  <AppliedJobs
+                    applications={applications}
+                    formatDateToYYYYMMDD={formatDateToYYYYMMDD}
+                  />
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/profile"
               element={
