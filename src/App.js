@@ -15,7 +15,14 @@ import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
 
 const App = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    email: "divya@gmail.com",
+    password: "divya123",
+    role: "user",
+    username: "Divya",
+    id: "-O9ViGlGcR9i2Od1uy16",
+  });
+  const [jobs, setJobs] = useState([]);
 
   // Function to update user profile
   const updateUser = (updatedUserData) => {
@@ -48,6 +55,26 @@ const App = () => {
       }
     } else {
       setUser({});
+    }
+  };
+
+  const loadJobs = async () => {
+    const dbRef = ref(db, "jobs");
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const jobs = snapshot.val();
+
+      const tempJobs = Object.keys(jobs).map((id) => {
+        return {
+          ...jobs[id],
+          id,
+        };
+      });
+
+      setJobs(tempJobs);
+      setFilteredJobs(tempJobs);
+    } else {
+      setJobs({});
     }
   };
 
@@ -86,111 +113,10 @@ const App = () => {
     setSelectedJob(job); // Set selected job for the application form
   };
 
-  // Initial job listings with detailed job information
-  const initialJobs = [
-    {
-      title: "Software Developer",
-      company: "Amazon",
-      location: "Hyderabad",
-      category: "Web Development",
-      description: "AWS Utility Computing (UC) provides product innovations...",
-      qualifications: "BCA, MCA",
-      workExperience: "2-4 Yrs in Software Development",
-      jobProfile: [
-        "Hands-on experience in design using object-oriented programming principles.",
-        "Strong understanding of object-oriented programming.",
-        "Familiarity with Microsoft SQL Server.",
-        "Experience with popular web application frameworks.",
-        "Understanding of fundamental design principles for building a scalable application.",
-      ],
-    },
-    {
-      title: "UI Engineer II",
-      company: "Flipkart",
-      location: "Chennai",
-      category: "Web Development",
-      description: "The scale at which Flipkart operates...",
-      qualifications: "B.E, B.Tech",
-      workExperience: "3-5 Yrs in Frontend Development",
-      jobProfile: [
-        "Expertise in modern JavaScript frameworks like React.",
-        "Strong UI/UX design skills.",
-        "Experience with REST APIs and integrating frontend with backend systems.",
-      ],
-    },
-    {
-      title: "Data Scientist",
-      company: "Google",
-      location: "Bangalore",
-      category: "Data Science",
-      description: "Data science innovations at Google...",
-      qualifications: "M.Sc in Statistics, Computer Science",
-      workExperience: "2-5 Yrs in Data Science",
-      jobProfile: [
-        "Expertise in statistical analysis and machine learning.",
-        "Experience with Python, R, and data visualization tools.",
-        "Strong background in SQL and data management.",
-      ],
-    },
-    {
-      title: "Backend Developer",
-      company: "Microsoft",
-      location: "Pune",
-      category: "Machine Learning",
-      description: "Developing scalable backend systems...",
-      qualifications: "B.E in Computer Science",
-      workExperience: "4-6 Yrs in Backend Development",
-      jobProfile: [
-        "Experience with distributed systems and cloud computing.",
-        "Proficiency in C#, .NET, and Azure.",
-        "Familiarity with microservices architecture.",
-      ],
-    },
-  ];
-
-  const categories = [...new Set(initialJobs.map((job) => job.category))];
+  const categories = [...new Set(jobs.map((job) => job.category))];
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
-  const [jobs, setJobs] = useState(initialJobs);
-  const [filteredJobs, setFilteredJobs] = useState(initialJobs);
-  const [hasMore, setHasMore] = useState(true); // Tracks if there are more jobs to load
-
-  // Filter jobs based on selected category
-  useEffect(() => {
-    if (selectedCategory) {
-      setFilteredJobs(jobs.filter((job) => job.category === selectedCategory));
-    } else {
-      setFilteredJobs(jobs); // Show all jobs if no category is selected
-    }
-  }, [selectedCategory, jobs]);
-
-  // Simulate an API call to load more jobs
-  const loadMoreJobs = () => {
-    setTimeout(() => {
-      const moreJobs = [
-        {
-          title: "Full Stack Developer",
-          company: "Facebook",
-          location: "Mumbai",
-          category: "Web Development",
-          description: "Build dynamic web applications...",
-          qualifications: "B.Tech, M.Tech",
-          workExperience: "3-5 Yrs in Full Stack Development",
-          jobProfile: [
-            "Expertise in React, Node.js, and MongoDB.",
-            "Strong understanding of both frontend and backend development.",
-          ],
-        },
-      ];
-
-      // Simulate end of data by conditionally loading more
-      if (jobs.length >= 10) {
-        setHasMore(false); // No more jobs to load after 10 items
-      } else {
-        setJobs([...jobs, ...moreJobs]);
-      }
-    }, 1500); // Simulating delay
-  };
+  const [filteredJobs, setFilteredJobs] = useState(jobs);
 
   function formatDateToYYYYMMDD(date) {
     const year = date.getFullYear(); // Get the full year (YYYY)
@@ -244,10 +170,9 @@ const App = () => {
                       setSelectedCategory={setSelectedCategory}
                     />
                     <JobListings
-                      loadMoreJobs={loadMoreJobs}
-                      hasMore={hasMore}
                       jobs={filteredJobs}
                       handleApply={handleApply} // Pass filtered jobs
+                      loadJobs={loadJobs}
                     />
                   </div>
                 </ProtectedRoute>

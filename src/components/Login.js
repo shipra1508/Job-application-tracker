@@ -11,8 +11,8 @@ import {
 import { Navigate } from "react-router-dom";
 
 const LoginPage = ({ user, setUser, loginUser }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("divya@gmail.com");
+  const [password, setPassword] = useState("divya123");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
