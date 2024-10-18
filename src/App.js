@@ -11,6 +11,9 @@ import JobApplicationForm from "./components/JobApplicationForm";
 import Profile from "./components/Profile"; // Import the Profile component
 import AppliedJobs from "./components/AppliedJobs"; // Import the Profile component
 
+import { db } from "./firebase/config";
+import { ref, get } from "firebase/database";
+
 const App = () => {
   const [user, setUser] = useState({});
 
@@ -22,7 +25,31 @@ const App = () => {
     }));
   };
 
-  
+  const loginUser = async (email, password) => {
+    const dbRef = ref(db, "users");
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const users = snapshot.val();
+
+      const tempUsers = Object.keys(users)
+        .map((id) => {
+          return {
+            ...users[id],
+            id,
+          };
+        })
+        .filter((user) => {
+          return user.email === email && user.password === password;
+        });
+
+      if (tempUsers.length === 1) {
+        setUser(tempUsers[0]);
+        console.log(tempUsers[0]);
+      }
+    } else {
+      setUser({});
+    }
+  };
 
   const [selectedJob, setSelectedJob] = useState(null);
   const [applications, setApplications] = useState([
@@ -196,11 +223,15 @@ const App = () => {
           <Routes>
             <Route
               path="/register"
-              element={<Register user={user} setUser={setUser} />}
+              element={
+                <Register user={user} setUser={setUser} loginUser={loginUser} />
+              }
             />
             <Route
               path="/login"
-              element={<Login user={user} setUser={setUser} />}
+              element={
+                <Login user={user} setUser={setUser} loginUser={loginUser} />
+              }
             />
             <Route
               path="/"

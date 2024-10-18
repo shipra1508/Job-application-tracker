@@ -1,9 +1,21 @@
 import React, { useState } from "react";
-import { Form, Button, Container, Row, Col, InputGroup } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  InputGroup,
+  Alert,
+} from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 
-const LoginPage = ({ user, setUser }) => {
+const LoginPage = ({ user, setUser, loginUser }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
 
   if (user?.email) {
     return <Navigate to="/" />;
@@ -11,6 +23,42 @@ const LoginPage = ({ user, setUser }) => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  // Validate email format
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Form validation
+  const validateForm = () => {
+    let formErrors = {};
+
+    if (!email) {
+      formErrors.email = "Email is required";
+    } else if (!isValidEmail(email)) {
+      formErrors.email = "Please enter a valid email";
+    }
+
+    if (!password) {
+      formErrors.password = "Password is required";
+    }
+
+    setErrors(formErrors);
+    return Object.keys(formErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      try {
+        await loginUser(email, password);
+      } catch (error) {
+        setShowAlert(true); // Show alert if login fails
+      }
+    }
   };
 
   return (
@@ -22,15 +70,37 @@ const LoginPage = ({ user, setUser }) => {
         >
           <div className="login-form w-75">
             <h2 className="text-left mb-4">Login</h2>
-            <Form>
+
+            {/* Alert for failed login */}
+            {showAlert && (
+              <Alert
+                variant="danger"
+                onClose={() => setShowAlert(false)}
+                dismissible
+              >
+                Invalid email or password. Please try again.
+              </Alert>
+            )}
+
+            <Form onSubmit={handleSubmit}>
               {/* Email Field */}
               <Form.Group className="mb-3" controlId="formEmail">
                 <Form.Label>Email</Form.Label>
                 <InputGroup className="login">
-                  <Form.Control type="email" placeholder="Email..." required />
+                  <Form.Control
+                    type="email"
+                    placeholder="Email..."
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    isInvalid={!!errors.email} // Highlight error
+                    required
+                  />
                   <InputGroup.Text>
-                    <i class="fa-solid fa-at"></i>
+                    <i className="fa-solid fa-at"></i>
                   </InputGroup.Text>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
 
@@ -41,6 +111,9 @@ const LoginPage = ({ user, setUser }) => {
                   <Form.Control
                     type={showPassword ? "text" : "password"}
                     placeholder="Password..."
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    isInvalid={!!errors.password} // Highlight error
                     required
                   />
                   <InputGroup.Text
@@ -55,6 +128,9 @@ const LoginPage = ({ user, setUser }) => {
                       }
                     ></i>
                   </InputGroup.Text>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
 
