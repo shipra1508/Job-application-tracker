@@ -12,14 +12,7 @@ import Profile from "./components/Profile"; // Import the Profile component
 import AppliedJobs from "./components/AppliedJobs"; // Import the Profile component
 
 const App = () => {
-  const [user, setUser] = useState({
-    fullName: "John Doe",
-    email: "john.doe@gmail.com",
-    skills: "Web Development",
-    experience: "2",
-    address: "123, Main Street",
-    mobile: "9876543210",
-  });
+  const [user, setUser] = useState({});
 
   // Function to update user profile
   const updateUser = (updatedUserData) => {
@@ -28,6 +21,8 @@ const App = () => {
       ...updatedUserData,
     }));
   };
+
+  
 
   const [selectedJob, setSelectedJob] = useState(null);
   const [applications, setApplications] = useState([
