@@ -10,12 +10,13 @@ import JobListings from "./components/JobListings";
 import JobApplicationForm from "./components/JobApplicationForm";
 import Profile from "./components/Profile"; // Import the Profile component
 import AppliedJobs from "./components/AppliedJobs"; // Import the AppliedJobs component
+import AddJob from "./components/AddJob"; // Import the AppliedJobs component
 
 import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
 
 const App = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -150,12 +151,14 @@ const App = () => {
                 <Register user={user} setUser={setUser} loginUser={loginUser} />
               }
             />
+
             <Route
               path="/login"
               element={
                 <Login user={user} setUser={setUser} loginUser={loginUser} />
               }
             />
+
             <Route
               path="/"
               element={
@@ -170,11 +173,13 @@ const App = () => {
                       jobs={filteredJobs}
                       handleApply={handleApply} // Pass filtered jobs
                       loadJobs={loadJobs}
+                      user={user}
                     />
                   </div>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/apply"
               element={
@@ -189,6 +194,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/applied-jobs"
               element={
@@ -201,6 +207,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/profile"
               element={

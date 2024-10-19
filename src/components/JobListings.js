@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Card, Button, Container, Spinner, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-const JobListing = ({ jobs, handleApply, loadJobs }) => {
+const JobListing = ({ jobs, handleApply, loadJobs, user }) => {
+  // Add user prop
   const [showModal, setShowModal] = useState(false); // To control modal visibility
   const [selectedJob, setSelectedJob] = useState(null); // To store selected job details
   const navigate = useNavigate(); // Initialize useNavigate
@@ -35,9 +36,12 @@ const JobListing = ({ jobs, handleApply, loadJobs }) => {
               {job.location}
             </Card.Subtitle>
             <Card.Text>{job.description}</Card.Text>
-            <Button variant="primary" onClick={() => handleApplyClick(job)}>
-              Apply
-            </Button>
+            {/* Conditionally render the Apply button based on user role */}
+            {user.role !== "company" && (
+              <Button variant="primary" onClick={() => handleApplyClick(job)}>
+                Apply
+              </Button>
+            )}
           </Card.Body>
         </Card>
       ))}
@@ -76,9 +80,12 @@ const JobListing = ({ jobs, handleApply, loadJobs }) => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleApplyNow}>
-              Apply Now
-            </Button>
+            {/* Conditionally render Apply Now button based on user role */}
+            {user.role !== "company" && (
+              <Button variant="primary" onClick={handleApplyNow}>
+                Apply Now
+              </Button>
+            )}
           </Modal.Footer>
         </Modal>
       )}

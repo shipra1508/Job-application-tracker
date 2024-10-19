@@ -3,7 +3,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, useLocation } from "react-router-dom"; // Import Link for client-side routing
 
-function Sidebar() {
+function Sidebar({ user }) {
   const location = useLocation();
 
   return (
@@ -66,16 +66,18 @@ function Sidebar() {
               >
                 <i class="fa-solid fa-house"></i> Dashboard
               </Link>
-              <Link
-                to="/applied-jobs"
-                className={
-                  location.pathname === "/applied-jobs"
-                    ? "w-100 mb-3 padding-extra text-decoration-none selected-navbar"
-                    : "w-100 mb-3 padding-extra text-decoration-none"
-                }
-              >
-                <i class="fa-solid fa-clipboard-list"></i> View Applied Jobs
-              </Link>
+              {user.role === "user" && (
+                <Link
+                  to="/applied-jobs"
+                  className={
+                    location.pathname === "/applied-jobs"
+                      ? "w-100 mb-3 padding-extra text-decoration-none selected-navbar"
+                      : "w-100 mb-3 padding-extra text-decoration-none"
+                  }
+                >
+                  <i class="fa-solid fa-clipboard-list"></i> View Applied Jobs
+                </Link>
+              )}
               <Link
                 to="/instructions"
                 className={

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Row, Col, InputGroup, Alert } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router-dom";
 import { db } from "../firebase/config";
-import { get, push, ref, set } from "firebase/database";
+import { push, ref, set } from "firebase/database";
 
 const RegistrationPage = ({ user, setUser, loginUser }) => {
   const navigate = useNavigate();
@@ -13,7 +13,6 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
     password: "",
     confirmPassword: "",
     experience: "",
-    skills: "",
     role: "user", // Default role set to 'user'
   });
 
@@ -68,10 +67,6 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
       setAlert("Please enter your experience");
       return;
     }
-    if (!form.skills.trim()) {
-      setAlert("Please enter your skills");
-      return;
-    }
 
     // Mark the form as validated
     setValidated(true);
@@ -84,7 +79,6 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
         role: form.role, // Save selected role
         password: form.password,
         experience: form.experience,
-        skills: form.skills,
       });
 
       setForm({
@@ -93,7 +87,6 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
         password: "",
         confirmPassword: "",
         experience: "",
-        skills: "",
         role: "user", // Reset role to default
       });
 
@@ -185,11 +178,17 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
 
               {/* Experience Field */}
               <Form.Group className="mb-3" controlId="formExperience">
-                <Form.Label>Experience</Form.Label>
+                <Form.Label>
+                  {form.role === "company" ? "Company Overview" : "Experience"}
+                </Form.Label>
                 <InputGroup className="register">
                   <Form.Control
                     type="text"
-                    placeholder="Experience..."
+                    placeholder={
+                      form.role === "company"
+                        ? "Overview of your company..."
+                        : "Experience..."
+                    }
                     name="experience"
                     value={form.experience}
                     onChange={onChange}
@@ -204,26 +203,27 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              {/* Skills Field */}
-              <Form.Group className="mb-3" controlId="formSkills">
-                <Form.Label>Skills</Form.Label>
-                <InputGroup className="register">
-                  <Form.Control
-                    type="text"
-                    placeholder="Skills..."
-                    name="skills"
-                    value={form.skills}
-                    onChange={onChange}
-                    required
-                  />
-                  <InputGroup.Text>
-                    <i className="fa-solid fa-star"></i>
-                  </InputGroup.Text>
-                </InputGroup>
-                <Form.Control.Feedback type="invalid">
-                  Please enter your skills.
-                </Form.Control.Feedback>
-              </Form.Group>
+              {/* Skills Field - only for users */}
+              {form.role === "user" && (
+                <Form.Group className="mb-3" controlId="formSkills">
+                  <Form.Label>Skills</Form.Label>
+                  <InputGroup className="register">
+                    <Form.Control
+                      type="text"
+                      placeholder="Skills..."
+                      name="skills"
+                      onChange={onChange}
+                      required
+                    />
+                    <InputGroup.Text>
+                      <i className="fa-solid fa-star"></i>
+                    </InputGroup.Text>
+                  </InputGroup>
+                  <Form.Control.Feedback type="invalid">
+                    Please enter your skills.
+                  </Form.Control.Feedback>
+                </Form.Group>
+              )}
 
               {/* Password Field */}
               <Form.Group className="mb-3" controlId="formPassword">
