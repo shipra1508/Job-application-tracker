@@ -12,6 +12,8 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
     email: "",
     password: "",
     confirmPassword: "",
+    experience: "",
+    skills: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +63,14 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
       setAlert("Passwords do not match");
       return;
     }
+    if (!form.experience.trim()) {
+      setAlert("Please enter your experience");
+      return;
+    }
+    if (!form.skills.trim()) {
+      setAlert("Please enter your skills");
+      return;
+    }
 
     // Mark the form as validated
     setValidated(true);
@@ -72,6 +82,8 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
         email: form.email,
         role: "user",
         password: form.password,
+        experience: form.experience,
+        skills: form.skills,
       });
 
       setForm({
@@ -79,6 +91,8 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
         email: "",
         password: "",
         confirmPassword: "",
+        experience: "",
+        skills: "",
       });
 
       await loginUser(form.email, form.password);
@@ -147,6 +161,48 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                 </InputGroup>
                 <Form.Control.Feedback type="invalid">
                   Please enter a valid email.
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              {/* Experience Field */}
+              <Form.Group className="mb-3" controlId="formExperience">
+                <Form.Label>Experience</Form.Label>
+                <InputGroup className="register">
+                  <Form.Control
+                    type="text"
+                    placeholder="Experience..."
+                    name="experience"
+                    value={form.experience}
+                    onChange={onChange}
+                    required
+                  />
+                  <InputGroup.Text>
+                    <i className="fa-solid fa-briefcase"></i>
+                  </InputGroup.Text>
+                </InputGroup>
+                <Form.Control.Feedback type="invalid">
+                  Please enter your experience.
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              {/* Skills Field */}
+              <Form.Group className="mb-3" controlId="formSkills">
+                <Form.Label>Skills</Form.Label>
+                <InputGroup className="register">
+                  <Form.Control
+                    type="text"
+                    placeholder="Skills..."
+                    name="skills"
+                    value={form.skills}
+                    onChange={onChange}
+                    required
+                  />
+                  <InputGroup.Text>
+                    <i className="fa-solid fa-star"></i>
+                  </InputGroup.Text>
+                </InputGroup>
+                <Form.Control.Feedback type="invalid">
+                  Please enter your skills.
                 </Form.Control.Feedback>
               </Form.Group>
 

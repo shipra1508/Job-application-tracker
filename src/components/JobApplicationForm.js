@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const JobApplicationForm = ({ user, jobTitle, onSubmit }) => {
+const JobApplicationForm = ({ user, selectedJob, onSubmit }) => {
   const navigate = useNavigate(); // Initialize navigate
   const [formData, setFormData] = useState({
-    fullName: user.fullName,
+    fullName: user.username,
     email: user.email,
     preferredSkills: "",
     maritalStatus: "",
@@ -28,7 +28,7 @@ const JobApplicationForm = ({ user, jobTitle, onSubmit }) => {
 
   return (
     <Container className="mt-5">
-      <h2>Application Form for {jobTitle}</h2>
+      <h2>Application Form for {selectedJob.title}</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group as={Row} controlId="formFullName">
           <Form.Label column sm={2}>

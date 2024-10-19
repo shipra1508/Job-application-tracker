@@ -17,10 +17,12 @@ import { ref, get } from "firebase/database";
 const App = () => {
   const [user, setUser] = useState({
     email: "divya@gmail.com",
+    experience: "5",
     password: "divya123",
     role: "user",
+    skills: "React,Java",
     username: "Divya",
-    id: "-O9ViGlGcR9i2Od1uy16",
+    id: "-O9VobrX-_0LvQQXjC0M",
   });
   const [jobs, setJobs] = useState([]);
 
@@ -51,7 +53,6 @@ const App = () => {
 
       if (tempUsers.length === 1) {
         setUser(tempUsers[0]);
-        console.log(tempUsers[0]);
       }
     } else {
       setUser({});
@@ -185,7 +186,7 @@ const App = () => {
                 <ProtectedRoute user={user}>
                   <JobApplicationForm
                     user={user}
-                    jobTitle={selectedJob?.title || ""}
+                    selectedJob={selectedJob}
                     onSubmit={handleApplicationSubmit}
                   />
                 </ProtectedRoute>

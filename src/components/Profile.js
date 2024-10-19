@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
+import { db } from "../firebase/config";
+import { ref, update } from "firebase/database";
 
 const Profile = ({ user, updateUser }) => {
   const [formData, setFormData] = useState({
-    fullName: user.fullName,
-    email: user.email,
-    skills: user.skills,
-    experience: user.experience,
-    address: user.address,
-    mobile: user.mobile,
+    username: user.username || "", // Ensure default to empty if user is undefined
+    email: user.email || "",
+    skills: user.skills || "",
+    experience: user.experience || "",
   });
 
   const [validated, setValidated] = useState(false);
@@ -22,15 +22,26 @@ const Profile = ({ user, updateUser }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.stopPropagation();
     } else {
-      // Update user profile
-      updateUser(formData);
-      setShowSuccess(true); // Show success alert after update
+      try {
+        const userRef = ref(db, `users/${user.id}`);
+        await update(userRef, {
+          username: formData.username,
+          email: formData.email,
+          experience: formData.experience,
+          skills: formData.skills.split(",").map((skill) => skill.trim()), // Convert skills to an array
+        });
+
+        updateUser(formData); // Update user context or state
+        setShowSuccess(true);
+      } catch (error) {
+        console.error("Error saving profile: ", error);
+      }
     }
     setValidated(true);
   };
@@ -55,8 +66,8 @@ const Profile = ({ user, updateUser }) => {
           <Col sm={10}>
             <Form.Control
               type="text"
-              name="fullName"
-              value={formData.fullName}
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               placeholder="Enter full name"
               required
@@ -91,19 +102,16 @@ const Profile = ({ user, updateUser }) => {
             Skills
           </Form.Label>
           <Col sm={10}>
-            <Form.Select
+            <Form.Control
+              type="text"
               name="skills"
               value={formData.skills}
               onChange={handleChange}
+              placeholder="Enter skills (comma separated)"
               required
-            >
-              <option>Select your skills</option>
-              <option value="Web Development">Web Development</option>
-              <option value="Data Science">Data Science</option>
-              <option value="Machine Learning">Machine Learning</option>
-            </Form.Select>
+            />
             <Form.Control.Feedback type="invalid">
-              Please select your skills.
+              Please provide valid skills.
             </Form.Control.Feedback>
           </Col>
         </Form.Group>
@@ -123,45 +131,6 @@ const Profile = ({ user, updateUser }) => {
             />
             <Form.Control.Feedback type="invalid">
               Please provide your experience in years.
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} controlId="formAddress" className="mb-3">
-          <Form.Label column sm={2}>
-            Address
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Enter address"
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please enter your address.
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} controlId="formMobile" className="mb-3">
-          <Form.Label column sm={2}>
-            Mobile Number
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control
-              type="tel"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
-              placeholder="Enter mobile number"
-              pattern="[0-9]{10}"
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid 10-digit mobile number.
             </Form.Control.Feedback>
           </Col>
         </Form.Group>
