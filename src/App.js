@@ -16,7 +16,7 @@ import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
 
 const App = () => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -213,6 +213,18 @@ const App = () => {
               element={
                 <ProtectedRoute user={user}>
                   <Profile user={user} updateUser={updateUser} />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/add-job"
+              element={
+                <ProtectedRoute user={user}>
+                  <AddJob
+                    user={user}
+                    formatDateToYYYYMMDD={formatDateToYYYYMMDD}
+                  />
                 </ProtectedRoute>
               }
             />
