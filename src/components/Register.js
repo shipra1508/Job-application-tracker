@@ -14,6 +14,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
     confirmPassword: "",
     experience: "",
     skills: "",
+    role: "user", // Default role set to 'user'
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -80,7 +81,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
       await set(newDocRef, {
         username: form.username,
         email: form.email,
-        role: "user",
+        role: form.role, // Save selected role
         password: form.password,
         experience: form.experience,
         skills: form.skills,
@@ -93,6 +94,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
         confirmPassword: "",
         experience: "",
         skills: "",
+        role: "user", // Reset role to default
       });
 
       await loginUser(form.email, form.password);
@@ -161,6 +163,23 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                 </InputGroup>
                 <Form.Control.Feedback type="invalid">
                   Please enter a valid email.
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              {/* Role Field */}
+              <Form.Group className="mb-3" controlId="formRole">
+                <Form.Label>Role</Form.Label>
+                <Form.Select
+                  name="role"
+                  value={form.role}
+                  onChange={onChange}
+                  required
+                >
+                  <option value="user">User</option>
+                  <option value="company">Company</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  Please select a role.
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -287,7 +306,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
           className="d-none d-md-flex align-items-center justify-content-center"
         >
           <img
-            src="https://via.placeholder.com/600x400" // Replace with your image path
+            src="https://cdni.iconscout.com/illustration/premium/thumb/job-application-form-illustration-download-in-svg-png-gif-file-formats--applying-for-available-hiring-new-employees-business-marketing-pack-illustrations-4874298.png" // Replace with your image path
             alt="Registration Illustration"
             className="img-fluid"
           />

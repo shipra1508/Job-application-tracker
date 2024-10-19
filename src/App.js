@@ -15,15 +15,7 @@ import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
 
 const App = () => {
-  const [user, setUser] = useState({
-    email: "divya@gmail.com",
-    experience: "5",
-    password: "divya123",
-    role: "user",
-    skills: ["React", "Java"],
-    username: "Divya 1",
-    id: "-O9VobrX-_0LvQQXjC0M",
-  });
+  const [user, setUser] = useState({});
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -126,6 +118,24 @@ const App = () => {
     return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
   }
 
+  const viewAllAppliedJobs = async () => {
+    const dbRef = ref(db, "applications");
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      const application = snapshot.val();
+      const tempApplications = Object.keys(application).map((id) => {
+        return {
+          ...application[id],
+          id,
+        };
+      });
+
+      setApplications(tempApplications);
+    } else {
+      setApplications([]);
+    }
+  };
+
   return (
     <Router>
       <Row>
@@ -185,6 +195,7 @@ const App = () => {
                 <ProtectedRoute user={user}>
                   <AppliedJobs
                     applications={applications}
+                    viewAllAppliedJobs={viewAllAppliedJobs}
                     formatDateToYYYYMMDD={formatDateToYYYYMMDD}
                   />
                 </ProtectedRoute>

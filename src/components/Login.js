@@ -154,7 +154,7 @@ const LoginPage = ({ user, setUser, loginUser }) => {
           className="d-none d-md-flex align-items-center justify-content-center"
         >
           <img
-            src="https://via.placeholder.com/600x400" // Replace this with your image path
+            src="https://cdni.iconscout.com/illustration/premium/thumb/mobile-login-illustration-download-in-svg-png-gif-file-formats--security-protection-secure-smartphone-encrypted-phone-seo-ppc-pack-business-illustrations-4708053.png" // Replace this with your image path
             alt="Login Illustration"
             className="img-fluid"
           />
