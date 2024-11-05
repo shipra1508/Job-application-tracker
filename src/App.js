@@ -13,6 +13,9 @@ import AppliedJobs from "./components/AppliedJobs"; // Import the AppliedJobs co
 import AddJob from "./components/AddJob"; // Import the AppliedJobs component
 import ViewCreatedJobs from "./components/ViewCreatedJobs";
 import EditJob from "./components/EditJob";
+import ApplicationsInstructions from "./components/ApplicationsInstructions";
+import ManageUsers from "./components/ManageUsers";
+import EditUser from "./components/EditUser";
 
 import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
@@ -253,6 +256,15 @@ const App = () => {
             />
 
             <Route path="/edit-job/:jobId" element={<EditJob user={user} />} />
+
+            <Route
+              path="/instructions"
+              element={<ApplicationsInstructions />}
+            />
+
+            <Route path="/manage-users" element={<ManageUsers />} />
+
+            <Route path="/edit-user/:id" element={<EditUser />} />
           </Routes>
         </Col>
       </Row>

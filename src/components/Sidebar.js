@@ -102,17 +102,32 @@ function Sidebar({ user, setUser }) {
                   <i class="fa-solid fa-clipboard-list"></i> View Created Jobs
                 </Link>
               )}
-              <Link
-                to="/instructions"
-                className={
-                  location.pathname === "/instructions"
-                    ? "w-100 mb-3 padding-extra text-decoration-none selected-navbar"
-                    : "w-100 mb-3 padding-extra text-decoration-none"
-                }
-              >
-                <i class="fa-solid fa-clipboard-check"></i> Application
-                Instructions
-              </Link>
+              {user.role === "user" ||
+                (user.role === "company" && (
+                  <Link
+                    to="/instructions"
+                    className={
+                      location.pathname === "/instructions"
+                        ? "w-100 mb-3 padding-extra text-decoration-none selected-navbar"
+                        : "w-100 mb-3 padding-extra text-decoration-none"
+                    }
+                  >
+                    <i class="fa-solid fa-clipboard-check"></i> Application
+                    Instructions
+                  </Link>
+                ))}
+              {user.role === "admin" && (
+                <Link
+                  to="/manage-users"
+                  className={
+                    location.pathname === "/manage-users"
+                      ? "w-100 mb-3 padding-extra text-decoration-none selected-navbar"
+                      : "w-100 mb-3 padding-extra text-decoration-none"
+                  }
+                >
+                  <i class="fa-solid fa-users"></i> Manage Users
+                </Link>
+              )}
               <Link
                 to="/profile"
                 className={
