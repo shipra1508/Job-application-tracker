@@ -90,6 +90,18 @@ function Sidebar({ user, setUser }) {
                   <i className="fa-solid fa-plus"></i> Add Job
                 </Link>
               )}
+              {user.role === "company" && (
+                <Link
+                  to="/created-jobs"
+                  className={
+                    location.pathname === "/created-jobs"
+                      ? "w-100 mb-3 padding-extra text-decoration-none selected-navbar"
+                      : "w-100 mb-3 padding-extra text-decoration-none"
+                  }
+                >
+                  <i class="fa-solid fa-clipboard-list"></i> View Created Jobs
+                </Link>
+              )}
               <Link
                 to="/instructions"
                 className={

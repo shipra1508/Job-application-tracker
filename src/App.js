@@ -11,6 +11,7 @@ import JobApplicationForm from "./components/JobApplicationForm";
 import Profile from "./components/Profile"; // Import the Profile component
 import AppliedJobs from "./components/AppliedJobs"; // Import the AppliedJobs component
 import AddJob from "./components/AddJob"; // Import the AppliedJobs component
+import ViewCreatedJobs from "./components/ViewCreatedJobs";
 
 import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
@@ -243,6 +244,11 @@ const App = () => {
                   />
                 </ProtectedRoute>
               }
+            />
+
+            <Route
+              path="/created-jobs"
+              element={<ViewCreatedJobs user={user} />}
             />
           </Routes>
         </Col>
