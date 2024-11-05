@@ -31,9 +31,12 @@
   background-color: #2ac670;
 }
 
-.navbar-search {
+.navbar-search,
+.navbar-search::placeholder,
+.navbar-search:active,
+.navbar-search:focus {
   background-color: black;
-  color: white;
+  color: grey !important;
 
   border: 0;
 }

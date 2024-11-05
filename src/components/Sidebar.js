@@ -3,8 +3,13 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, useLocation } from "react-router-dom"; // Import Link for client-side routing
 
-function Sidebar({ user }) {
+function Sidebar({ user, setUser }) {
   const location = useLocation();
+
+  const logout = () => {
+    setUser({});
+    localStorage.removeItem("job-application-tracker");
+  };
 
   return (
     <>
@@ -13,18 +18,13 @@ function Sidebar({ user }) {
           id={`offcanvasNavbarLabel-expand-false`}
           className="w-100 pb-3"
         >
-          <div className="d-flex w-100 mb-5">
-            <div className="circle circle1 m-1"></div>
-            <div className="circle circle2 m-1"></div>
-            <div className="circle circle3 m-1"></div>
-          </div>
           Job Portal
         </Offcanvas.Title>
         <Form className="d-flex w-100 mb-3">
           <Form.Control
             type="search"
             placeholder="Search"
-            className="navbar-search padding-extra  text-decoration-none"
+            className="navbar-search padding-extra text-decoration-none"
             aria-label="Search"
           />
         </Form>
@@ -110,6 +110,12 @@ function Sidebar({ user }) {
                 }
               >
                 <i class="fa-solid fa-address-card"></i> Profile
+              </Link>
+              <Link
+                className="w-100 mb-3 padding-extra text-decoration-none"
+                onClick={logout}
+              >
+                <i class="fa-solid fa-sign-out"></i> Logout
               </Link>
             </>
           )}

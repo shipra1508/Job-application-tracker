@@ -16,7 +16,14 @@ import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
 
 const App = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    email: "company@gmail.com",
+    experience: "Very good company",
+    password: "company123",
+    role: "company",
+    username: "Company",
+    id: "-O9WXn9Y2DyMaiVHABJj",
+  });
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -48,7 +55,10 @@ const App = () => {
 
       if (tempUsers.length === 1) {
         setUser(tempUsers[0]);
-        console.log(tempUsers[0]);
+        localStorage.setItem(
+          "job-application-tracker",
+          JSON.stringify(tempUsers[0])
+        );
       }
     } else {
       setUser({});
@@ -74,11 +84,6 @@ const App = () => {
       setFilteredJobs([]);
     }
   };
-
-  // Load jobs on initial render
-  useEffect(() => {
-    loadJobs();
-  }, []);
 
   const handleApply = (job) => {
     setSelectedJob(job); // Set selected job for the application form
@@ -137,11 +142,22 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    loadJobs();
+
+    const user = localStorage.getItem("job-application-tracker");
+    try {
+      if (user) {
+        setUser(JSON.parse(user));
+      }
+    } catch (err) {}
+  }, []);
+
   return (
     <Router>
       <Row>
         <Col md={3}>
-          <Sidebar user={user} />
+          <Sidebar user={user} setUser={setUser} />
         </Col>
         <Col md={9} className="p-0 m-0">
           <Routes>
