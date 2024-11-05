@@ -1,6 +1,7 @@
+// ViewCreatedJobs.js (Update the import and edit button section)
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase/config"; // Import your Firebase config
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, remove } from "firebase/database"; // Import remove for deleting
 import { Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
@@ -27,6 +28,18 @@ const ViewCreatedJobs = ({ user }) => {
       setJobs(jobsData);
     });
   }, [user, navigate]);
+
+  const handleDelete = async (jobId) => {
+    if (window.confirm("Are you sure you want to delete this job?")) {
+      try {
+        await remove(ref(db, "jobs/" + jobId)); // Remove job from Firebase
+        alert("Job deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting job: ", error);
+        alert("Failed to delete the job. Please try again.");
+      }
+    }
+  };
 
   return (
     <div className="pt-5">
@@ -70,12 +83,6 @@ const ViewCreatedJobs = ({ user }) => {
       )}
     </div>
   );
-};
-
-const handleDelete = async (jobId) => {
-  // Implement delete functionality here
-  // For example, you can call remove(ref(db, 'jobs/' + jobId))
-  // to delete the job from Firebase
 };
 
 export default ViewCreatedJobs;
