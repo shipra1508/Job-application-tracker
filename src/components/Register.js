@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Row, Col, InputGroup, Alert } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router-dom";
 import { db } from "../firebase/config";
-import { push, ref, set } from "firebase/database";
+import { get, push, ref, set } from "firebase/database";
 
 const RegistrationPage = ({ user, setUser, loginUser }) => {
   const navigate = useNavigate();
@@ -72,6 +72,19 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
     setValidated(true);
 
     try {
+      // Check if the email already exists in the Firebase database
+      const usersRef = ref(db, "users");
+      const snapshot = await get(usersRef);
+      const usersData = snapshot.val();
+      const emailExists = Object.values(usersData || {}).some(
+        (user) => user.email === form.email
+      );
+
+      if (emailExists) {
+        setAlert("Email is already in use. Please choose another one.");
+        return; // Exit the function if email is already taken
+      }
+
       const newDocRef = push(ref(db, "users"));
       await set(newDocRef, {
         username: form.username,

@@ -25,14 +25,7 @@ import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
 
 const App = () => {
-  const [user, setUser] = useState({
-    email: "company@gmail.com",
-    experience: "Very good company",
-    password: "company123",
-    role: "company",
-    username: "Company",
-    id: "-O9WXn9Y2DyMaiVHABJj",
-  });
+  const [user, setUser] = useState({});
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
