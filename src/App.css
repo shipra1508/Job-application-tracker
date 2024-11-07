@@ -31,6 +31,10 @@
   background-color: #2ac670;
 }
 
+.sidebar {
+  min-width: 300px;
+}
+
 .navbar-search,
 .navbar-search::placeholder,
 .navbar-search:active,

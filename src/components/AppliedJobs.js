@@ -35,6 +35,8 @@ const AppliedJobs = ({ applications, viewAllAppliedJobs }) => {
             </Card>
           </Col>
         ))}
+        {applications?.length === 0 &&
+          "No Applications found! Please go to Dashboard and Apply Jobs."}
       </Row>
     </Container>
   );

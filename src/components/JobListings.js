@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Container, Spinner, Modal } from "react-bootstrap";
+import { Card, Button, Container, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import AddSchedule from "./AddSchedule";
+import { onValue, ref, update } from "firebase/database";
+import { db } from "../firebase/config";
 
-const JobListing = ({ jobs, handleApply, loadJobs, user }) => {
-  // Add user prop
+const JobListing = ({
+  jobs,
+  handleApply,
+  loadJobs,
+  user,
+  schedules,
+  setSchedules,
+  applications,
+}) => {
   const [showModal, setShowModal] = useState(false); // To control modal visibility
+  const [showScheduleModal, setShowScheduleModal] = useState(false); // Modal for scheduling
   const [selectedJob, setSelectedJob] = useState(null); // To store selected job details
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -13,16 +24,68 @@ const JobListing = ({ jobs, handleApply, loadJobs, user }) => {
     setShowModal(true); // Open the modal
   };
 
-  const handleClose = () => setShowModal(false); // Close the modal
+  const handleScheduleClick = (job) => {
+    setSelectedJob(job); // Set the selected job
+    setShowScheduleModal(true); // Open schedule modal
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setShowScheduleModal(false); // Close both modals
+  };
 
   const handleApplyNow = () => {
     handleApply(selectedJob); // Set the selected job in App component
     navigate("/apply"); // Navigate to the application form
   };
 
+  // Check if job is already scheduled for the user
+  const isJobScheduled = (jobId) => {
+    return schedules?.some(
+      (schedule) => schedule.jobId === jobId && schedule.status === "Scheduled"
+    );
+  };
+
+  // Check if job is already applied by the user
+  const isJobApplied = (jobId) => {
+    console.log(applications);
+    return (
+      applications?.filter(
+        (application) =>
+          application.jobid === jobId && application.userid === user.id
+      ).length > 0
+    );
+  };
+
   useEffect(() => {
     loadJobs();
-  }, []);
+  }, [loadJobs]);
+
+  useEffect(() => {
+    const schedulesRef = ref(db, "schedules");
+    onValue(schedulesRef, (snapshot) => {
+      const schedulesData = snapshot.val();
+      const userSchedules = [];
+      for (let id in schedulesData) {
+        if (schedulesData[id].userId === user.id) {
+          const schedule = schedulesData[id];
+          // Check if the schedule date has passed and update the status
+          const today = new Date();
+          const scheduleDate = new Date(schedule.scheduleDate);
+
+          // If the interview date has passed, update status to "Completed"
+          if (scheduleDate < today) {
+            schedule.status = "Completed";
+            // Optionally update the status in the database
+            update(ref(db, `schedules/${id}`), { status: "Completed" });
+          }
+
+          userSchedules.push(schedule);
+        }
+      }
+      setSchedules(userSchedules);
+    });
+  }, [user.id]);
 
   return (
     <Container className="w-100 h-75 px-0">
@@ -36,10 +99,47 @@ const JobListing = ({ jobs, handleApply, loadJobs, user }) => {
               {job.location}
             </Card.Subtitle>
             <Card.Text>{job.description}</Card.Text>
-            {/* Conditionally render the Apply button based on user role */}
-            {user.role !== "company" && (
-              <Button variant="primary" onClick={() => handleApplyClick(job)}>
-                Apply
+
+            {/* Conditionally render the Apply button or "Applied" if already applied */}
+            {user.role === "user" &&
+              !isJobApplied(job.id) &&
+              !isJobScheduled(job.id) && (
+                <Button
+                  variant="primary"
+                  className="me-3"
+                  onClick={() => handleApplyClick(job)}
+                >
+                  <i class="fa-solid fa-pen-alt me-2" />
+                  Apply
+                </Button>
+              )}
+
+            {/* Show 'Applied' if the user has already applied */}
+            {user.role === "user" && isJobApplied(job.id) && (
+              <Button variant="secondary" className="me-3" disabled>
+                <i class="fa-solid fa-check-circle me-2" />
+                Applied
+              </Button>
+            )}
+
+            {/* Conditionally render Schedule Interview button based on job status */}
+            {user.role === "user" &&
+              !isJobScheduled(job.id) &&
+              isJobApplied(job.id) && (
+                <Button
+                  variant="success"
+                  onClick={() => handleScheduleClick(job)}
+                >
+                  <i class="fa-solid fa-calendar-check me-2" />
+                  Schedule Interview
+                </Button>
+              )}
+
+            {/* Show 'Already Scheduled' if the job is already scheduled */}
+            {user.role === "user" && isJobScheduled(job.id) && (
+              <Button variant="secondary" disabled>
+                <i class="fa-solid fa-check-circle me-2" />
+                Already Scheduled
               </Button>
             )}
           </Card.Body>
@@ -88,6 +188,15 @@ const JobListing = ({ jobs, handleApply, loadJobs, user }) => {
             )}
           </Modal.Footer>
         </Modal>
+      )}
+
+      {/* Modal for scheduling interview */}
+      {selectedJob && showScheduleModal && (
+        <AddSchedule
+          job={selectedJob}
+          user={user}
+          setShowScheduleModal={setShowScheduleModal}
+        />
       )}
     </Container>
   );

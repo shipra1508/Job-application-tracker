@@ -16,6 +16,10 @@ import EditJob from "./components/EditJob";
 import ApplicationsInstructions from "./components/ApplicationsInstructions";
 import ManageUsers from "./components/ManageUsers";
 import EditUser from "./components/EditUser";
+import AdminDashboard from "./components/AdminDashboard";
+import AddSchedule from "./components/AddSchedule";
+import ViewUserSchedule from "./components/ViewUserSchedule";
+import ViewCompanySchedule from "./components/ViewCompanySchedule";
 
 import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
@@ -40,6 +44,8 @@ const App = () => {
       ...updatedUserData,
     }));
   };
+
+  const [schedules, setSchedules] = useState([]);
 
   const loginUser = async (email, password) => {
     const dbRef = ref(db, "users");
@@ -121,6 +127,24 @@ const App = () => {
     setSelectedJob(null); // Clear the selected job after submission
   };
 
+  const loadApplications = async () => {
+    const dbRef = ref(db, "applications"); // Reference to the "applications" path in Firebase
+    const snapshot = await get(dbRef); // Fetch data from Firebase
+    if (snapshot.exists()) {
+      const applicationsData = snapshot.val(); // Get the data
+      const tempApplications = Object.keys(applicationsData).map((id) => {
+        return {
+          ...applicationsData[id], // Spread the application data
+          id, // Include the application ID
+        };
+      });
+
+      setApplications(tempApplications); // Update the state with the fetched applications
+    } else {
+      setApplications([]); // If no applications exist, set an empty array
+    }
+  };
+
   function formatDateToYYYYMMDD(date) {
     const year = date.getFullYear(); // Get the full year (YYYY)
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month (0-11) and pad with leading zero
@@ -148,6 +172,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    loadApplications();
     loadJobs();
 
     const user = localStorage.getItem("job-application-tracker");
@@ -184,19 +209,26 @@ const App = () => {
               path="/"
               element={
                 <ProtectedRoute user={user}>
-                  <div className="d-flex flex-column justify-content-around align-items-center vh-100 dashboard">
-                    <Header
-                      categories={["All", ...categories]} // Add "All" to categories
-                      selectedCategory={selectedCategory}
-                      setSelectedCategory={handleCategoryChange} // Pass function to change category
-                    />
-                    <JobListings
-                      jobs={filteredJobs}
-                      handleApply={handleApply} // Pass filtered jobs
-                      loadJobs={loadJobs}
-                      user={user}
-                    />
-                  </div>
+                  {user.role === "admin" ? (
+                    <AdminDashboard />
+                  ) : (
+                    <div className="d-flex flex-column justify-content-around align-items-center vh-100 dashboard">
+                      <Header
+                        categories={["All", ...categories]} // Add "All" to categories
+                        selectedCategory={selectedCategory}
+                        setSelectedCategory={handleCategoryChange} // Pass function to change category
+                      />
+                      <JobListings
+                        jobs={filteredJobs}
+                        handleApply={handleApply} // Pass filtered jobs
+                        loadJobs={loadJobs}
+                        user={user}
+                        schedules={schedules}
+                        setSchedules={setSchedules}
+                        applications={applications}
+                      />
+                    </div>
+                  )}
                 </ProtectedRoute>
               }
             />
@@ -212,6 +244,39 @@ const App = () => {
                     categories={categories}
                     formatDateToYYYYMMDD={formatDateToYYYYMMDD}
                   />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/view-schedule"
+              element={
+                <ProtectedRoute user={user}>
+                  {user.role === "user" && (
+                    <ViewUserSchedule
+                      user={user}
+                      userId={user.id}
+                      schedules={schedules}
+                      setSchedules={setSchedules}
+                    />
+                  )}
+                  {user.role === "company" && (
+                    <ViewCompanySchedule
+                      user={user}
+                      companyId={user.id}
+                      schedules={schedules}
+                      setSchedules={setSchedules}
+                    />
+                  )}
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/add-schedule"
+              element={
+                <ProtectedRoute user={user}>
+                  <AddSchedule user={user} companyId={user.id} />
                 </ProtectedRoute>
               }
             />
