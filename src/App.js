@@ -210,6 +210,8 @@ const App = () => {
                         categories={["All", ...categories]} // Add "All" to categories
                         selectedCategory={selectedCategory}
                         setSelectedCategory={handleCategoryChange} // Pass function to change category
+                        jobs={jobs}
+                        loadJobs={loadJobs}
                       />
                       <JobListings
                         jobs={filteredJobs}

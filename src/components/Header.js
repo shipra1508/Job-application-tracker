@@ -1,42 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel, Button, Container } from "react-bootstrap";
 
-const Header = ({ categories, selectedCategory, setSelectedCategory }) => {
+const Header = ({
+  categories,
+  selectedCategory,
+  setSelectedCategory,
+  jobs,
+  loadJobs,
+}) => {
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
   };
 
+  const getRandomImage = () => {
+    const images = [
+      "https://foundthejob.com/wp-content/uploads/2024/05/APPLY-LINK-SEEKERAS-2-17-compressed.jpg",
+    ];
+
+    // Return a random image from the array
+    return images[Math.floor(Math.random() * images.length)];
+  };
+
+  const [randomImage, setRandomImage] = useState("");
+
+  useEffect(() => {
+    loadJobs();
+    setRandomImage(getRandomImage());
+  }, []);
+
   return (
     <Container fluid className="w-100 pt-5 px-0">
       <Carousel>
-        <Carousel.Item>
-          <img
-            className=""
-            src="https://via.placeholder.com/1150x200"
-            alt="Hiring banner 1"
-          />
-          <Carousel.Caption>
-            <h3>We Are Hiring</h3>
-            <p>Join our team for exciting opportunities!</p>
-            <Button variant="primary" size="lg">
-              Apply Now
-            </Button>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className=""
-            src="https://via.placeholder.com/1150x200"
-            alt="Hiring banner 2"
-          />
-          <Carousel.Caption>
-            <h3>Join Our Team</h3>
-            <p>We are looking for skilled professionals!</p>
-            <Button variant="primary" size="lg">
-              Apply Now
-            </Button>
-          </Carousel.Caption>
-        </Carousel.Item>
+        {jobs.slice(0, 3).map((job, index) => (
+          <Carousel.Item key={index}>
+            <div className="carousel-image-container">
+              <img
+                className="carousel-image"
+                src={randomImage}
+                alt={`Hiring banner ${index + 1}`}
+              />
+              {/* Dark overlay */}
+              <div className="dark-overlay"></div>
+            </div>
+            <Carousel.Caption>
+              <h3>{job.title}</h3>
+              <p>{job.description}</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+        ))}
       </Carousel>
 
       <div className="d-flex justify-content-start my-3">
