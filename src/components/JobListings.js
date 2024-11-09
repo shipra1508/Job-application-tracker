@@ -59,7 +59,7 @@ const JobListing = ({
 
   useEffect(() => {
     loadJobs();
-  }, [loadJobs]);
+  }, []);
 
   useEffect(() => {
     const schedulesRef = ref(db, "schedules");

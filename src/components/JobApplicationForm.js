@@ -19,6 +19,7 @@ const JobApplicationForm = ({
     preferredSkills: "",
     maritalStatus: "",
     experience: user.experience,
+    resume: "",
   });
 
   const [validated, setValidated] = useState(false); // State for form validation
@@ -55,6 +56,7 @@ const JobApplicationForm = ({
         maritalStatus: formData.maritalStatus,
         status: "Applied",
         dateApplied: formatDateToYYYYMMDD(new Date()),
+        resume: formData.resume,
       });
 
       setErrorMessage(""); // Clear error message if valid
@@ -172,6 +174,25 @@ const JobApplicationForm = ({
             />
             <Form.Control.Feedback type="invalid">
               Please enter your experience in years.
+            </Form.Control.Feedback>
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} controlId="formResume" className="mt-3">
+          <Form.Label column sm={2}>
+            Resume URL
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              type="number"
+              name="resume"
+              value={formData.resume}
+              onChange={handleChange}
+              placeholder="Upload your resume"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Please upload your resume.
             </Form.Control.Feedback>
           </Col>
         </Form.Group>

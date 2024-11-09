@@ -42,7 +42,7 @@ const Header = ({
               {/* Dark overlay */}
               <div className="dark-overlay"></div>
             </div>
-            <Carousel.Caption>
+            <Carousel.Caption style={{ color: "#333333 !important" }}>
               <h3>{job.title}</h3>
               <p>{job.description}</p>
             </Carousel.Caption>

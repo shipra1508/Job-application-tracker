@@ -121,3 +121,10 @@
 .carousel-caption {
   z-index: 2; /* Ensures caption is above the overlay */
 }
+
+.navbar-link-color {
+  color: white !important;
+}
+.navbar-link-color-selected {
+  color: black !important;
+}

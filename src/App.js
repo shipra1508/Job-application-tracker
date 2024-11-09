@@ -319,7 +319,7 @@ const App = () => {
 
             <Route
               path="/instructions"
-              element={<ApplicationsInstructions />}
+              element={<ApplicationsInstructions user={user} />}
             />
 
             <Route path="/manage-users" element={<ManageUsers />} />
