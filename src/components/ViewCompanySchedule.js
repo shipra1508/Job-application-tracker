@@ -46,7 +46,7 @@ const CompanySchedule = ({ companyId }) => {
   // Handle selecting a date on the calendar
   const handleDateClick = (date) => {
     const currentDate = new Date();
-    const formattedCurrentDate = formatDate(currentDate);
+    const formattedCurrentDate = formatDate(date);
   
     setSelectedDate(date);
     const schedulesForDate = schedules.filter(
