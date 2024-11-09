@@ -34,17 +34,27 @@ const UserSchedule = ({ userId }) => {
       setSchedules(userSchedules);
     });
   }, [userId]);
+  
+// Helper function to format date as YYYY-MM-DD
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
+    const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
+    return ${year}-${month}-${day};
+  };     
 
   // Handle selecting a date on the calendar
   const handleDateClick = (date) => {
+    const currentDate = new Date();
+    const formattedCurrentDate = formatDate(currentDate);
+  
     setSelectedDate(date);
-    const dateString = date.toISOString().split("T")[0]; // Format to YYYY-MM-DD
     const schedulesForDate = schedules.filter(
-      (schedule) => schedule.scheduleDate === dateString
+      (schedule) => schedule.scheduleDate === formattedCurrentDate
     );
     setSelectedSchedules(schedulesForDate);
     setShowModal(true);
-  };
+  };
 
   // Highlight dates with interviews on the calendar
   const tileClassName = ({ date, view }) => {
