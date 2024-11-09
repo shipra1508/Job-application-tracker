@@ -43,7 +43,6 @@ const ScheduleJob = ({ user, job, setShowScheduleModal }) => {
           companyId: job.createdBy,
           scheduleDate,
           status: "Scheduled",
-          title: job?.title,
           company: job.company,
           username: user.username,
         });
@@ -63,7 +62,7 @@ const ScheduleJob = ({ user, job, setShowScheduleModal }) => {
       className="mt-5"
     >
       <Modal.Header closeButton>
-        <Modal.Title>Schedule Interview for </Modal.Title>
+        <Modal.Title>Schedule Interview  </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {errorMessage && (
