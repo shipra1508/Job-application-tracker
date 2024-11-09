@@ -26,7 +26,7 @@ const CompanySchedule = ({ companyId }) => {
           // Update status to "Completed" if the interview date has passed
           if (scheduleDate < today) {
             schedule.status = "Completed";
-            update(ref(db, `schedules/${id}`), { status: "Completed" });
+            update(ref(db, schedules/${id}), { status: "Completed" });
           }
           companySchedules.push({ ...schedule, id });
         }
@@ -54,8 +54,7 @@ const CompanySchedule = ({ companyId }) => {
     );
     setSelectedSchedules(schedulesForDate);
     setShowModal(true);
-  };
-
+  };
 
   // Highlight dates with interviews on the calendar
   const tileClassName = ({ date, view }) => {
