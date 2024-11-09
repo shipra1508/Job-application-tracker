@@ -26,7 +26,7 @@ const UserSchedule = ({ userId }) => {
           // If the interview date has passed, update status to "Completed"
           if (scheduleDate < today) {
             schedule.status = "Completed";
-            update(ref(db, `schedules/${id}`), { status: "Completed" });
+            update(ref(db, schedules/${id}), { status: "Completed" });
           }
           userSchedules.push({ ...schedule, id });
         }
@@ -34,8 +34,8 @@ const UserSchedule = ({ userId }) => {
       setSchedules(userSchedules);
     });
   }, [userId]);
-  
-// Helper function to format date as YYYY-MM-DD
+
+  // Helper function to format date as YYYY-MM-DD
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
@@ -54,7 +54,7 @@ const UserSchedule = ({ userId }) => {
     );
     setSelectedSchedules(schedulesForDate);
     setShowModal(true);
-  };
+  };
 
   // Highlight dates with interviews on the calendar
   const tileClassName = ({ date, view }) => {
