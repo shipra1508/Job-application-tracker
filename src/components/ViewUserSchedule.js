@@ -26,7 +26,7 @@ const UserSchedule = ({ userId }) => {
           // If the interview date has passed, update status to "Completed"
           if (scheduleDate < today) {
             schedule.status = "Completed";
-            update(ref(db, schedules/${id}), { status: "Completed" });
+            update(ref(db, `schedules/${id}`), { status: "Completed" });
           }
           userSchedules.push({ ...schedule, id });
         }
@@ -40,7 +40,7 @@ const UserSchedule = ({ userId }) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
     const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
-    return ${year}-${month}-${day};
+    return `${year}-${month}-${day}`;
   };     
 
   // Handle selecting a date on the calendar
