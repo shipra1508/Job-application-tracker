@@ -121,27 +121,6 @@ const JobListing = ({
                 Applied
               </Button>
             )}
-
-            {/* Conditionally render Schedule Interview button based on job status */}
-            {user.role === "user" &&
-              !isJobScheduled(job.id) &&
-              isJobApplied(job.id) && (
-                <Button
-                  variant="success"
-                  onClick={() => handleScheduleClick(job)}
-                >
-                  <i class="fa-solid fa-calendar-check me-2" />
-                  Schedule Interview
-                </Button>
-              )}
-
-            {/* Show 'Already Scheduled' if the job is already scheduled */}
-            {user.role === "user" && isJobScheduled(job.id) && (
-              <Button variant="secondary" disabled>
-                <i class="fa-solid fa-check-circle me-2" />
-                Already Scheduled
-              </Button>
-            )}
           </Card.Body>
         </Card>
       ))}
@@ -188,15 +167,6 @@ const JobListing = ({
             )}
           </Modal.Footer>
         </Modal>
-      )}
-
-      {/* Modal for scheduling interview */}
-      {selectedJob && showScheduleModal && (
-        <AddSchedule
-          job={selectedJob}
-          user={user}
-          setShowScheduleModal={setShowScheduleModal}
-        />
       )}
     </Container>
   );

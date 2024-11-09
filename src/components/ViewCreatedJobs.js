@@ -62,6 +62,12 @@ const ViewCreatedJobs = ({ user }) => {
                 <td>{job.description}</td>
                 <td>
                   <button
+                    onClick={() => navigate(`/view-applications/${job.id}`)}
+                    className="btn btn-info w-100 mb-1"
+                  >
+                    View Applications <i className="fa-solid fa-eye color-white"></i>
+                  </button>
+                  <button
                     onClick={() => navigate(`/edit-job/${job.id}`)}
                     className="btn btn-warning w-100 mb-1"
                   >

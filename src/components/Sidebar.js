@@ -102,18 +102,6 @@ function Sidebar({ user, setUser }) {
                   <i class="fa-solid fa-clipboard-list"></i> View Created Jobs
                 </Link>
               )}
-              {user.role === "company" && (
-                <Link
-                  to="/add-schedule"
-                  className={
-                    location.pathname === "/add-schedule"
-                      ? "w-100 mb-2 padding-extra text-decoration-none navbar-link-color-selected selected-navbar"
-                      : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
-                  }
-                >
-                  <i class="fa-solid fa-calendar-plus"></i> Add Schedule
-                </Link>
-              )}
               {(user.role === "user" || user.role === "company") && (
                 <>
                   <Link

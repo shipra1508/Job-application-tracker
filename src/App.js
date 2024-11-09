@@ -20,6 +20,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import AddSchedule from "./components/AddSchedule";
 import ViewUserSchedule from "./components/ViewUserSchedule";
 import ViewCompanySchedule from "./components/ViewCompanySchedule";
+import ViewJobApplications from "./components/ViewJobApplications";
 
 import { db } from "./firebase/config";
 import { ref, get } from "firebase/database";
@@ -314,6 +315,9 @@ const App = () => {
               path="/created-jobs"
               element={<ViewCreatedJobs user={user} />}
             />
+
+<Route path="/view-applications/:jobId" element={<ViewJobApplications user={user} />} />
+      
 
             <Route path="/edit-job/:jobId" element={<EditJob user={user} />} />
 
