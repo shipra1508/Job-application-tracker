@@ -43,7 +43,7 @@ const ScheduleJob = ({ user, job, setShowScheduleModal }) => {
           companyId: job.createdBy,
           scheduleDate,
           status: "Scheduled",
-          title: job.title,
+          title: job?.title,
           company: job.company,
           username: user.username,
         });
