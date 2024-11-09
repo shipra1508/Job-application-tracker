@@ -63,7 +63,7 @@ const ScheduleJob = ({ user, job, setShowScheduleModal }) => {
       className="mt-5"
     >
       <Modal.Header closeButton>
-        <Modal.Title>Schedule Interview for {job.title}</Modal.Title>
+        <Modal.Title>Schedule Interview for </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {errorMessage && (
