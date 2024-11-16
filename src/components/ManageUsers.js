@@ -64,14 +64,14 @@ const ManageUsers = () => {
                     className="me-2"
                     onClick={() => handleEdit(user.id)}
                   >
-                    Edit <i class="fa-solid fa-pencil color-white"></i>
+                    Edit <em class="fa-solid fa-pencil color-white"></em>
                   </Button>
                   <Button
                     variant="danger"
                     onClick={() => handleDelete(user.id)}
                     className="ml-2"
                   >
-                    Delete <i class="fa-solid fa-trash color-white"></i>
+                    Delete <em class="fa-solid fa-trash color-white"></em>
                   </Button>
                 </td>
               </tr>

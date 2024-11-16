@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase/config";
 import { ref, onValue } from "firebase/database";
 import { Table, Button } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import ScheduleJob from "./AddSchedule"; // Import ScheduleJob component
 
 const ViewJobApplications = ({ user }) => {
@@ -76,9 +76,13 @@ const ViewJobApplications = ({ user }) => {
                 <td>{app.preferredSkills}</td>
                 <td>{app.maritalStatus}</td>
                 <td>
-                  <a href={app.resume} target="_blank" rel="noopener noreferrer">
+                  <Link
+                    to={app.resume}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     View Resume
-                  </a>
+                  </Link>
                 </td>
                 <td>
                   <Button

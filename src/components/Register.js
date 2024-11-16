@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Row, Col, InputGroup, Alert } from "react-bootstrap";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { db } from "../firebase/config";
 import { get, push, ref, set } from "firebase/database";
 
@@ -124,7 +124,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
 
             {alert && (
               <Alert variant="danger" className="w-100 p-2">
-                <i className="fa-solid fa-triangle-exclamation me-2"></i>
+                <em className="fa-solid fa-triangle-exclamation me-2"></em>
                 {alert}
               </Alert>
             )}
@@ -143,7 +143,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                     required
                   />
                   <InputGroup.Text>
-                    <i className="fa-solid fa-user"></i>
+                    <em className="fa-solid fa-user"></em>
                   </InputGroup.Text>
                 </InputGroup>
                 <Form.Control.Feedback type="invalid">
@@ -164,7 +164,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                     required
                   />
                   <InputGroup.Text>
-                    <i className="fa-solid fa-at"></i>
+                    <em className="fa-solid fa-at"></em>
                   </InputGroup.Text>
                 </InputGroup>
                 <Form.Control.Feedback type="invalid">
@@ -208,7 +208,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                     required
                   />
                   <InputGroup.Text>
-                    <i className="fa-solid fa-briefcase"></i>
+                    <em className="fa-solid fa-briefcase"></em>
                   </InputGroup.Text>
                 </InputGroup>
                 <Form.Control.Feedback type="invalid">
@@ -229,7 +229,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                       required
                     />
                     <InputGroup.Text>
-                      <i className="fa-solid fa-star"></i>
+                      <em className="fa-solid fa-star"></em>
                     </InputGroup.Text>
                   </InputGroup>
                   <Form.Control.Feedback type="invalid">
@@ -255,13 +255,13 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                     onClick={togglePasswordVisibility}
                     style={{ cursor: "pointer" }}
                   >
-                    <i
+                    <em
                       className={
                         showPassword
                           ? "fa-solid fa-eye-slash"
                           : "fa-regular fa-eye"
                       }
-                    ></i>
+                    ></em>
                   </InputGroup.Text>
                 </InputGroup>
                 <Form.Control.Feedback type="invalid">
@@ -285,13 +285,13 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
                     onClick={toggleConfirmPasswordVisibility}
                     style={{ cursor: "pointer" }}
                   >
-                    <i
+                    <em
                       className={
                         showConfirmPassword
                           ? "fa-solid fa-eye-slash"
                           : "fa-regular fa-eye"
                       }
-                    ></i>
+                    ></em>
                   </InputGroup.Text>
                 </InputGroup>
                 <Form.Control.Feedback type="invalid">
@@ -307,7 +307,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
               {/* Already Registered Link */}
               <div className="w-100 text-center">
                 <Form.Text className="text-muted">
-                  Already have an account? <a href="/login">Login here!</a>
+                  Already have an account? <Link to="/login">Login here!</Link>
                 </Form.Text>
               </div>
             </Form>
@@ -320,7 +320,7 @@ const RegistrationPage = ({ user, setUser, loginUser }) => {
         >
           <img
             src="https://cdni.iconscout.com/illustration/premium/thumb/job-application-form-illustration-download-in-svg-png-gif-file-formats--applying-for-available-hiring-new-employees-business-marketing-pack-illustrations-4874298.png" // Replace with your image path
-            alt="Registration Illustration"
+            alt="job application form illustration"
             className="img-fluid"
           />
         </Col>

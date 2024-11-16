@@ -6,7 +6,7 @@ import { Card, Col, Row } from "react-bootstrap";
 const AdminDashboard = () => {
   return (
     <div className="pt-5">
-      <h2>Admin Dashboard</h2>
+      <Card.Header>Admin Dashboard</Card.Header>
       <Row className="mt-4">
         <Col md={6}>
           <Card className="text-center">
@@ -14,6 +14,7 @@ const AdminDashboard = () => {
               variant="top"
               src="https://img.freepik.com/free-vector/concept-image-upload-landing-page_23-2148298839.jpg  "
               style={{ height: "150px", objectFit: "cover" }}
+              alt="User Management Image"
             />
             <Card.Body>
               <Card.Title>User Management</Card.Title>

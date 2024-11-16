@@ -109,7 +109,7 @@ const JobListing = ({
                   className="me-3"
                   onClick={() => handleApplyClick(job)}
                 >
-                  <i class="fa-solid fa-pen-alt me-2" />
+                  <em class="fa-solid fa-pen-alt me-2" />
                   Apply
                 </Button>
               )}
@@ -117,7 +117,7 @@ const JobListing = ({
             {/* Show 'Applied' if the user has already applied */}
             {user.role === "user" && isJobApplied(job.id) && (
               <Button variant="secondary" className="me-3" disabled>
-                <i class="fa-solid fa-check-circle me-2" />
+                <em class="fa-solid fa-check-circle me-2" />
                 Applied
               </Button>
             )}

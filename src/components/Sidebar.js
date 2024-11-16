@@ -31,7 +31,7 @@ function Sidebar({ user, setUser }) {
                   : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
               }
             >
-              <i className="fa-solid fa-circle-user"></i> Login
+              <em className="fa-solid fa-circle-user"></em> Login
             </Link>
             <Link
               to="/register"
@@ -41,21 +41,13 @@ function Sidebar({ user, setUser }) {
                   : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
               }
             >
-              <i className="fa-solid fa-note-sticky"></i> Register
+              <em className="fa-solid fa-note-sticky"></em> Register
             </Link>
           </>
         )}
         {location.pathname !== "/register" &&
           location.pathname !== "/login" && (
             <>
-              <Form className="d-flex w-100 mb-3">
-                <Form.Control
-                  type="search"
-                  placeholder="Search"
-                  className="navbar-search padding-extra text-decoration-none navbar-link-color"
-                  aria-label="Search"
-                />
-              </Form>
               <Link
                 to="/"
                 className={
@@ -64,7 +56,7 @@ function Sidebar({ user, setUser }) {
                     : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                 }
               >
-                <i class="fa-solid fa-house"></i> Dashboard
+                <em class="fa-solid fa-house"></em> Dashboard
               </Link>
               {user.role === "user" && (
                 <Link
@@ -75,7 +67,7 @@ function Sidebar({ user, setUser }) {
                       : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                   }
                 >
-                  <i class="fa-solid fa-clipboard-list"></i> View Applied Jobs
+                  <em class="fa-solid fa-clipboard-list"></em> View Applied Jobs
                 </Link>
               )}
               {user.role === "company" && (
@@ -87,7 +79,7 @@ function Sidebar({ user, setUser }) {
                       : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                   }
                 >
-                  <i className="fa-solid fa-plus"></i> Add Job
+                  <em className="fa-solid fa-plus"></em> Add Job
                 </Link>
               )}
               {user.role === "company" && (
@@ -99,7 +91,7 @@ function Sidebar({ user, setUser }) {
                       : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                   }
                 >
-                  <i class="fa-solid fa-clipboard-list"></i> View Created Jobs
+                  <em class="fa-solid fa-clipboard-list"></em> View Created Jobs
                 </Link>
               )}
               {(user.role === "user" || user.role === "company") && (
@@ -112,7 +104,7 @@ function Sidebar({ user, setUser }) {
                         : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                     }
                   >
-                    <i class="fa-solid fa-clipboard-check"></i> Application
+                    <em class="fa-solid fa-clipboard-check"></em> Application
                     Instructions
                   </Link>
 
@@ -124,7 +116,7 @@ function Sidebar({ user, setUser }) {
                         : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                     }
                   >
-                    <i class="fa-solid fa-calendar-check"></i> Schedules
+                    <em class="fa-solid fa-calendar-check"></em> Schedules
                   </Link>
                 </>
               )}
@@ -137,7 +129,7 @@ function Sidebar({ user, setUser }) {
                       : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                   }
                 >
-                  <i class="fa-solid fa-users"></i> Manage Users
+                  <em class="fa-solid fa-users"></em> Manage Users
                 </Link>
               )}
               <Link
@@ -148,13 +140,13 @@ function Sidebar({ user, setUser }) {
                     : "w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                 }
               >
-                <i class="fa-solid fa-address-card"></i> Profile
+                <em class="fa-solid fa-address-card"></em> Profile
               </Link>
               <Link
                 className="w-100 mb-2 padding-extra text-decoration-none navbar-link-color"
                 onClick={logout}
               >
-                <i class="fa-solid fa-sign-out"></i> Logout
+                <em class="fa-solid fa-sign-out"></em> Logout
               </Link>
             </>
           )}

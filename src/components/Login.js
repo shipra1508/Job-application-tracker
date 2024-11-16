@@ -8,7 +8,7 @@ import {
   InputGroup,
   Alert,
 } from "react-bootstrap";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const LoginPage = ({ user, setUser, loginUser }) => {
   const [email, setEmail] = useState("");
@@ -96,7 +96,7 @@ const LoginPage = ({ user, setUser, loginUser }) => {
                     required
                   />
                   <InputGroup.Text>
-                    <i className="fa-solid fa-at"></i>
+                    <em className="fa-solid fa-at"></em>
                   </InputGroup.Text>
                   <Form.Control.Feedback type="invalid">
                     {errors.email}
@@ -120,13 +120,13 @@ const LoginPage = ({ user, setUser, loginUser }) => {
                     onClick={togglePasswordVisibility}
                     style={{ cursor: "pointer" }}
                   >
-                    <i
+                    <em
                       className={
                         showPassword
                           ? "fa-solid fa-eye-slash"
                           : "fa-regular fa-eye"
                       }
-                    ></i>
+                    ></em>
                   </InputGroup.Text>
                   <Form.Control.Feedback type="invalid">
                     {errors.password}
@@ -142,7 +142,7 @@ const LoginPage = ({ user, setUser, loginUser }) => {
               {/* Forgot Password Link */}
               <div className="w-100 text-center">
                 <Form.Text className="text-muted">
-                  <a href="/register">New User? Sign Up here!</a>
+                  <Link to="/register">New User? Sign Up here!</Link>
                 </Form.Text>
               </div>
             </Form>
@@ -155,7 +155,7 @@ const LoginPage = ({ user, setUser, loginUser }) => {
         >
           <img
             src="https://cdni.iconscout.com/illustration/premium/thumb/mobile-login-illustration-download-in-svg-png-gif-file-formats--security-protection-secure-smartphone-encrypted-phone-seo-ppc-pack-business-illustrations-4708053.png" // Replace this with your image path
-            alt="Login Illustration"
+            alt="Mobile login illustration"
             className="img-fluid"
           />
         </Col>

@@ -65,19 +65,20 @@ const ViewCreatedJobs = ({ user }) => {
                     onClick={() => navigate(`/view-applications/${job.id}`)}
                     className="btn btn-info w-100 mb-1"
                   >
-                    View Applications <i className="fa-solid fa-eye color-white"></i>
+                    View Applications{" "}
+                    <em className="fa-solid fa-eye color-white"></em>
                   </button>
                   <button
                     onClick={() => navigate(`/edit-job/${job.id}`)}
                     className="btn btn-warning w-100 mb-1"
                   >
-                    Edit <i class="fa-solid fa-pencil color-white"></i>
+                    Edit <em class="fa-solid fa-pencil color-white"></em>
                   </button>
                   <button
                     onClick={() => handleDelete(job.id)}
                     className="btn btn-danger w-100"
                   >
-                    Delete <i class="fa-solid fa-trash color-white"></i>
+                    Delete <em class="fa-solid fa-trash color-white"></em>
                   </button>
                 </td>
               </tr>
