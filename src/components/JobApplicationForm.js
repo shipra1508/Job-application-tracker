@@ -184,7 +184,7 @@ const JobApplicationForm = ({
           </Form.Label>
           <Col sm={10}>
             <Form.Control
-              type="number"
+              type="text"
               name="resume"
               value={formData.resume}
               onChange={handleChange}

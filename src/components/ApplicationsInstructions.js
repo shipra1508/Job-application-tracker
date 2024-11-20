@@ -6,7 +6,7 @@ import { Card, ListGroup } from "react-bootstrap";
 const ApplicationsInstructions = ({ user }) => {
   return (
     <div className="pt-5">
-      <h2 className="primary-color">Application Instructions</h2>
+      <h3 className="primary-color">Application Instructions</h3>
       {user.role === "user" ? (
         <div className="instructions">
           <br />
