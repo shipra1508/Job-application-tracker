@@ -222,6 +222,7 @@ const App = () => {
                         schedules={schedules}
                         setSchedules={setSchedules}
                         applications={applications}
+                        loadApplications={loadApplications}
                       />
                     </div>
                   )}
@@ -316,8 +317,10 @@ const App = () => {
               element={<ViewCreatedJobs user={user} />}
             />
 
-<Route path="/view-applications/:jobId" element={<ViewJobApplications user={user} />} />
-      
+            <Route
+              path="/view-applications/:jobId"
+              element={<ViewJobApplications user={user} />}
+            />
 
             <Route path="/edit-job/:jobId" element={<EditJob user={user} />} />
 

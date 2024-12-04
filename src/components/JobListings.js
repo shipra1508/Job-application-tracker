@@ -13,6 +13,7 @@ const JobListing = ({
   schedules,
   setSchedules,
   applications,
+  loadApplications,
 }) => {
   const [showModal, setShowModal] = useState(false); // To control modal visibility
   const [showScheduleModal, setShowScheduleModal] = useState(false); // Modal for scheduling
@@ -48,7 +49,6 @@ const JobListing = ({
 
   // Check if job is already applied by the user
   const isJobApplied = (jobId) => {
-    console.log(applications);
     return (
       applications?.filter(
         (application) =>
@@ -59,6 +59,7 @@ const JobListing = ({
 
   useEffect(() => {
     loadJobs();
+    loadApplications();
   }, []);
 
   useEffect(() => {
